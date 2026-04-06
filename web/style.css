@@ -1,0 +1,268 @@
+:root {
+    --gold: #FFD700;
+    --gold-glow: rgba(255, 215, 0, 0.4);
+    --dark-bg: #050508;
+    --panel-bg: rgba(20, 20, 25, 0.6);
+    --text-primary: #f0f0f5;
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Background Atmosphere */
+.space-background {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 10%, #11111a 0%, #050508 100%);
+    z-index: 0;
+}
+
+/* The Sun (Tau Ceti) */
+.tau-ceti-sun {
+    position: absolute;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle at center, #fff 0%, #ffdf80 20%, #ff8c00 60%, transparent 80%);
+    border-radius: 50%;
+    box-shadow: 0 0 120px 40px rgba(255, 140, 0, 0.4);
+    z-index: 1;
+    filter: blur(2px);
+    animation: sunPulse 4s infinite alternate;
+}
+
+@keyframes sunPulse {
+    from { box-shadow: 0 0 100px 30px rgba(255, 140, 0, 0.3); }
+    to { box-shadow: 0 0 140px 50px rgba(255, 140, 0, 0.5); }
+}
+
+/* 3D Perspective Container */
+#perspective-container {
+    position: absolute;
+    inset: 0;
+    perspective: 1200px;
+    perspective-origin: 50% 10%; /* Look down towards the sun */
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none; /* Let clicks pass through */
+}
+
+/* Starships Drifting Animations */
+.ship {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+}
+
+.blip-a {
+    animation: driftBlip 60s ease-in-out infinite alternate;
+}
+
+.hail-mary {
+    animation: driftMary 45s ease-in-out infinite alternate;
+}
+
+@keyframes driftBlip {
+    0% { top: 20%; left: 30%; transform: rotate(0deg) scale(0.8); }
+    25% { top: 15%; left: 45%; transform: rotate(45deg) scale(0.5); }
+    50% { top: 35%; left: 75%; transform: rotate(180deg) scale(1.1); filter: drop-shadow(0 0 30px var(--gold)); }
+    100% { top: 10%; left: 40%; transform: rotate(360deg) scale(0.9); }
+}
+
+@keyframes driftMary {
+    0% { top: 60%; left: 85%; transform: rotate(-20deg) scale(0.7); filter: drop-shadow(0 0 20px #add8e6); }
+    50% { top: 25%; left: 20%; transform: rotate(45deg) scale(0.3); }
+    100% { top: 50%; left: 55%; transform: rotate(-10deg) scale(0.6); }
+}
+
+/* Petrova Line Arc */
+.petrova-line-svg {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.petrova-text {
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* Chat Messages */
+#chat-history {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    width: 600px;
+    transform: translateX(-50%);
+    transform-style: preserve-3d;
+}
+
+.message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform-origin: center bottom;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* Hardware acceleration */
+    will-change: transform, opacity, filter; 
+}
+
+.message .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.message.user .role { color: #88ccff; }
+.message.rocky .role { color: var(--gold); }
+
+.message .text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    white-space: pre-wrap; /* Treats text like a <pre> element to preserve LLM newlines */
+    font-family: inherit;
+}
+
+/* Foreground UI */
+.ui-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none; /* Let messages be seen, grab input explicitly */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+header {
+    background: linear-gradient(180deg, rgba(0,0,0,0.8), transparent);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: var(--text-primary);
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    font-size: 0.85rem;
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background: #00ffaa;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ffaa;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+#input-container {
+    padding: 2rem;
+    background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent);
+    pointer-events: auto; /* Re-enable clicks for the input dock */
+    display: flex;
+    justify-content: center;
+}
+
+#chat-form {
+    display: flex;
+    width: 600px;
+    max-width: 90vw;
+    gap: 16px;
+    position: relative;
+}
+
+#chat-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#chat-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 15px var(--gold-glow);
+}
+
+#send-btn {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    width: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--gold-glow);
+}
+
+#send-btn:active {
+    transform: translateY(1px);
+}

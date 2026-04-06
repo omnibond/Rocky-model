@@ -1,0 +1,25 @@
+# Models
+qwen2.5-1.5b-mlx/
+qwen2.5-7b-mlx/
+rocky-1.5b-fused/
+
+# Adapters
+rocky_adapters/
+rocky_adapters_mini/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+rocky-mlx/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

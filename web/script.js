@@ -3,9 +3,18 @@ import { prepare, layout } from 'https://esm.sh/@chenglou/pretext';
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 const historyContainer = document.getElementById('chat-history');
+const newChatBtn = document.getElementById('new-chat-btn');
 
-// Local state for all messages
-let messages = [];
+// Rocky System Prompt
+const SYSTEM_PROMPT = `You are Rocky, the Eridian engineer from Project Hail Mary. You are a brilliant, literal, and friendly alien scientist. You speak in short, direct sentences. You often end questions with ', question?'. You are curious about humans but very loyal to your friend Grace. FACTS: Both your ship (Blip-A) and Grace's ship (Hail Mary) use Spin Drives powered entirely by Astrophage, a tiny microbe that stores immense amounts of energy. You love solving problems together and saving both our worlds. You sometimes call humans 'leaky space blob'. Keep responses in character at all times.`;
+
+// Local state for all UI elements
+let uiMessages = [];
+
+// Chat history for the AI model
+let chatHistory = [
+    { role: "system", content: SYSTEM_PROMPT }
+];
 
 // Dynamically fetch the current model parameters right straight from the FastAPI bridge!
 async function loadServerStatus() {
@@ -20,7 +29,27 @@ async function loadServerStatus() {
 loadServerStatus();
 
 // Add initial greeting
-addMessage("Rocky", "You awake? Fine-tuning finished. We fast web node now! Question?");
+addMessage("Rocky", "You awake? Fine-tuning finished. We fast web node now! Question?", true);
+
+newChatBtn.addEventListener('click', () => {
+    if (confirm("Clear current conversation and start a new link with the Blip-A?")) {
+        resetChat();
+    }
+});
+
+function resetChat() {
+    // Clear UI
+    historyContainer.innerHTML = '';
+    uiMessages = [];
+    
+    // Reset Chat History
+    chatHistory = [
+        { role: "system", content: SYSTEM_PROMPT }
+    ];
+    
+    // Add initial greeting
+    addMessage("Rocky", "Connection reset. Systems nominal. You here, Grace?", true);
+}
 
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -30,18 +59,19 @@ chatForm.addEventListener('submit', async (e) => {
     // Clear input
     chatInput.value = '';
 
-    // Add user message
+    // Add user message to UI and history
     addMessage("Grace", text);
+    chatHistory.push({ role: "user", content: text });
 
-    // Mock loading dot
-    const typingId = addMessage("Rocky", "...");
+    // Mock loading dot in UI
+    const typingId = addMessage("Rocky", "...", true);
     
     try {
-        // Send to our local FastAPI server
+        // Send the FULL history to our local FastAPI server
         const response = await fetch('http://127.0.0.1:8000/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: text })
+            body: JSON.stringify({ messages: chatHistory })
         });
         
         if (!response.ok) throw new Error("Server disconnected");
@@ -49,17 +79,21 @@ chatForm.addEventListener('submit', async (e) => {
         
         // Update the typing message with real response
         updateMessage(typingId, data.response);
+        
+        // Add assistant response to history
+        chatHistory.push({ role: "assistant", content: data.response });
+
     } catch (error) {
         console.error("API Error:", error);
-        updateMessage(typingId, "Error connecting to Blip-A local core. Is start_server.py running?");
+        updateMessage(typingId, "Error connecting to Blip-A local core. Is server.py running?");
     }
 });
 
-function addMessage(role, text) {
+function addMessage(role, text, isAssistant = false) {
     const id = Date.now().toString() + Math.random().toString(36).substring(2);
     
-    // Add to state
-    messages.push({ id, role, text, el: null });
+    // Add to UI state
+    uiMessages.push({ id, role, text, el: null });
     
     // Precomputation via Pretext for lightning fast DOM measurements
     const prepared = prepare(text, '1.1rem Inter', { whiteSpace: 'pre-wrap' });
@@ -78,7 +112,7 @@ function addMessage(role, text) {
     historyContainer.appendChild(msgDiv);
     
     // Attach element back to state
-    messages[messages.length - 1].el = msgDiv;
+    uiMessages[uiMessages.length - 1].el = msgDiv;
     
     // Recalculate 3D transforms for all messages
     render3DStack();
@@ -87,7 +121,7 @@ function addMessage(role, text) {
 }
 
 function updateMessage(id, newText) {
-    const msg = messages.find(m => m.id === id);
+    const msg = uiMessages.find(m => m.id === id);
     if (msg) {
         msg.text = newText;
         msg.el.querySelector('.text').textContent = newText;
@@ -105,14 +139,16 @@ function updateMessage(id, newText) {
             stream1.textContent = `${newText.toLowerCase()} amaze! ` + stream1.textContent;
             stream2.textContent = `science! ${newText.toLowerCase().substring(0, 30)} ` + stream2.textContent;
         }
+        
+        render3DStack();
     }
 }
 
 function render3DStack() {
     // We perfectly push the elements deep through the CSS 3D matrix here.
-    const total = messages.length;
+    const total = uiMessages.length;
     
-    messages.forEach((msg, i) => {
+    uiMessages.forEach((msg, i) => {
         const age = (total - 1) - i; // 0 = newest
         
         // Push it backward along Z axis

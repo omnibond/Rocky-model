@@ -2,9 +2,9 @@ import os
 import subprocess
 import sys
 
-MODEL_PATH = "./qwen2.5-1.5b-mlx"
-ADAPTER_PATH = "./rocky_adapters_mini"
-FUSED_PATH = "./rocky-1.5b-fused"
+MODEL_PATH = "./models/qwen2.5-1.5b-mlx"
+ADAPTER_PATH = "./models/rocky_adapters_mini"
+FUSED_PATH = "./models/rocky-1.5b-fused"
 
 def main():
     print("==================================================")

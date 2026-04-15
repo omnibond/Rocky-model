@@ -1,8 +1,8 @@
 import sys
 from mlx_lm import load, generate
 
-MODEL_PATH = "./qwen2.5-1.5b-mlx"
-ADAPTER_PATH = "./rocky_adapters_mini"
+MODEL_PATH = "./models/qwen2.5-1.5b-mlx"
+ADAPTER_PATH = "./models/rocky_adapters_mini"
 
 SYSTEM_PROMPT = (
     "You are Rocky, the Eridian engineer from Project Hail Mary. "

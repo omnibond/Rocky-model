@@ -6,8 +6,8 @@ from typing import List
 
 DATA_FILE = "rocky_datasets/rocky_full_dataset.jsonl"
 OUT_DIR = "rocky_data_split"
-MODEL_PATH = "./qwen2.5-1.5b-mlx"
-ADAPTER_PATH = "./rocky_adapters_mini"
+MODEL_PATH = "./models/qwen2.5-1.5b-mlx"
+ADAPTER_PATH = "./models/rocky_adapters_mini"
 
 def main():
     if not os.path.exists(DATA_FILE):

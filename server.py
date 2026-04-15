@@ -21,13 +21,13 @@ app.add_middleware(
 )
 
 if args.mini:
-    MODEL_PATH = "./qwen2.5-1.5b-mlx"
-    ADAPTER_PATH = "./rocky_adapters_mini"
+    MODEL_PATH = "./models/qwen2.5-1.5b-mlx"
+    ADAPTER_PATH = "./models/rocky_adapters_mini"
     print("==================================================")
     print("Attempting to load FAST 1.5B Edge Model into FastAPI...")
 else:
-    MODEL_PATH = "./qwen2.5-7b-mlx"
-    ADAPTER_PATH = "./rocky_adapters"
+    MODEL_PATH = "./models/qwen2.5-7b-mlx"
+    ADAPTER_PATH = "./models/rocky_adapters"
     print("==================================================")
     print("Attempting to load HEAVY 7B Foundation Model into FastAPI...")
     print("⏳ This requires mapping ~14GB of memory. It usually takes 1-2 minutes... Please wait!")

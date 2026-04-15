@@ -44,11 +44,11 @@ Pull the base Qwen models completely unauthenticated from HuggingFace and perfec
 
 **For the Heavy (7B) core:**
 ```bash
-python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-7B-Instruct --mlx-path ./qwen2.5-7b-mlx -q
+python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-7B-Instruct --mlx-path ./models/qwen2.5-7b-mlx -q
 ```
 **For the Rapid Edge (1.5B) core:**
 ```bash
-python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-1.5B-Instruct --mlx-path ./qwen2.5-1.5b-mlx -q
+python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-1.5B-Instruct --mlx-path ./models/qwen2.5-1.5b-mlx -q
 ```
 
 ### 4. Finetuning Training Pass

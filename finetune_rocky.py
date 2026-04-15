@@ -6,8 +6,8 @@ from pathlib import Path
 
 DATA_FILE = "rocky_datasets/rocky_full_dataset_clean.jsonl"
 OUT_DIR = "rocky_data_split"
-MODEL_PATH = "./qwen2.5-7b-mlx"
-ADAPTER_PATH = "./rocky_adapters"
+MODEL_PATH = "./models/qwen2.5-7b-mlx"
+ADAPTER_PATH = "./models/rocky_adapters"
 
 def main():
     if not os.path.exists(DATA_FILE):
@@ -45,7 +45,7 @@ def main():
         print(f"\nWarning: The base model path '{MODEL_PATH}' was not found.")
         print("Before running fine-tuning, make sure you convert the HuggingFace model into MLX format!")
         print("Run this command exactly as written in your virtual environment:")
-        print("python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-7B-Instruct --mlx-path ./qwen2.5-7b-mlx -q")
+        print("python3 -m mlx_lm convert --hf-path Qwen/Qwen2.5-7B-Instruct --mlx-path ./models/qwen2.5-7b-mlx -q")
         return
         
     print("\nStarting MLX LoRA Fine-tuning Phase...")

@@ -1,11 +1,5 @@
-# Models
-qwen2.5-1.5b-mlx/
-qwen2.5-7b-mlx/
-rocky-1.5b-fused/
-
-# Adapters
-rocky_adapters/
-rocky_adapters_mini/
+# Models and Adapters
+models/
 
 # Python
 __pycache__/

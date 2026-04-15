@@ -81,7 +81,7 @@ python3 server.py --mini
 **CRITICAL WEB LAUNCH STEP:**
 Do not double click the local `index.html` file in your Mac Finder! Chrome security policies strictly block `file://` fetching. Instead, once the python script prints `FASTAPI ENGINE READY!`, immediately type `http://127.0.0.1:8000` directly into your web browser's URL bar! The Python Engine organically hosts the HTML graphics itself right alongside the AI API routing!
 
-### 7. Exporting Core directly into an Edge Browser
+### Extra Item ---Exporting Core directly into an Edge Browser----
 If you want to strip away the Python overhead entirely and cross-compile your finalized MLX arrays into pure `.wasm` shaders for native WebGPU execution (e.g. for WebLLM implementation):
 ```bash
 python3 export_web.py
